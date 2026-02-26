@@ -50,9 +50,7 @@ export function SettingsModal({ onClose }: Props) {
                             value={localModel}
                             onChange={(e) => setLocalModel(e.target.value)}
                         >
-                            <option value="gemini-2.0-flash">gemini-2.0-flash (Fast, Recommended)</option>
-                            <option value="gemini-2.5-flash">gemini-2.5-flash (Newest)</option>
-                            <option value="gemini-2.0-pro-exp">gemini-2.0-pro-exp (High Accuracy Experimental)</option>
+                            <option value="gemini-2.5-flash">gemini-2.5-flash</option>
                         </select>
                     </div>
                 </div>
