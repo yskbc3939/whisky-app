@@ -105,6 +105,24 @@ export default function Home() {
                     </p>
                   </div>
                 )}
+
+                {(whisky.whiskybaseRating || whisky.whiskybaseUrl) && (
+                  <div style={{ marginTop: '0.75rem', padding: '0.75rem', borderRadius: '8px', background: 'rgba(207, 170, 112, 0.08)', border: '1px solid rgba(207, 170, 112, 0.2)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 600 }}>Whiskybase</span>
+                      {whisky.whiskybaseRating && (
+                        <span style={{ color: 'var(--accent-gold)', fontSize: '1.1rem', fontWeight: 700 }}>
+                          ★ {whisky.whiskybaseRating}<span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>/100</span>
+                        </span>
+                      )}
+                    </div>
+                    {whisky.whiskybaseUrl && (
+                      <a href={whisky.whiskybaseUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-gold)', fontSize: '0.75rem', textDecoration: 'underline', opacity: 0.8, marginTop: '0.25rem', display: 'inline-block' }}>
+                        View on Whiskybase →
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}

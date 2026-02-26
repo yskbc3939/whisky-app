@@ -10,6 +10,8 @@ export interface Whisky {
     caskType: string;
     caskNumber: string;
     tastingNotes: string;
+    whiskybaseRating: string;
+    whiskybaseUrl: string;
     openedDate: string; // ISO date string
     imageUrl?: string;
     addedAt: string;

@@ -28,6 +28,10 @@ export async function POST(req: NextRequest) {
 - tastingNotes は必ず日本語で出力してください。
 - distilledYear, bottledYear, caskNumber は数値またはコード（言語不問）。
 
+【Whiskybase連携】
+- whiskybase.com でこのウイスキーを検索し、OVERALL RATINGの数値（100点満点）と該当ページのURLを取得してください。
+- 見つからない場合は両方とも空文字を返してください。
+
 必須フィールド：
 - name: ウイスキーの商品名（英語で出力）
 - distilledYear: 蒸溜年（不明な場合は空文字を返すか推測）
@@ -36,6 +40,8 @@ export async function POST(req: NextRequest) {
 - caskType: 樽タイプ（英語で出力。例: Sherry Butt, Bourbon Barrel, Mizunara 等。不明な場合は空文字）
 - caskNumber: 樽番号（不明な場合は空文字）
 - tastingNotes: テイスティングノート（日本語で出力。香り、味わい、余韻などの特徴）
+- whiskybaseRating: Whiskybase.comのOVERALL RATING（例: "87"）。見つからない場合は空文字。
+- whiskybaseUrl: Whiskybase.comの該当ウイスキーページURL（例: "https://www.whiskybase.com/whiskies/whisky/12345"）。見つからない場合は空文字。
 
 出力例:
 [
@@ -46,7 +52,9 @@ export async function POST(req: NextRequest) {
     "region": "Japanese",
     "caskType": "Sherry Butt",
     "caskNumber": "",
-    "tastingNotes": "熟した柿や桃の香り。奥行きのある甘味と厚みのある味わい。"
+    "tastingNotes": "熟した柿や桃の香り。奥行きのある甘味と厚みのある味わい。",
+    "whiskybaseRating": "87",
+    "whiskybaseUrl": "https://www.whiskybase.com/whiskies/whisky/12345/yamazaki-12-year-old"
   }
 ]`;
 

@@ -22,6 +22,8 @@ export function WhiskyForm({ initialData, onClose, isEditing = false }: Props) {
         caskType: initialData?.caskType || '',
         caskNumber: initialData?.caskNumber || '',
         tastingNotes: initialData?.tastingNotes || '',
+        whiskybaseRating: initialData?.whiskybaseRating || '',
+        whiskybaseUrl: initialData?.whiskybaseUrl || '',
         openedDate: initialData?.openedDate || '',
     });
 
@@ -95,6 +97,24 @@ export function WhiskyForm({ initialData, onClose, isEditing = false }: Props) {
                             placeholder="Describe the aroma, palate, and finish..."
                         />
                     </div>
+
+                    {(formData.whiskybaseRating || formData.whiskybaseUrl) && (
+                        <div style={{ padding: '1rem', borderRadius: '8px', background: 'rgba(207, 170, 112, 0.08)', border: '1px solid rgba(207, 170, 112, 0.2)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                <span style={{ color: 'var(--accent-gold)', fontWeight: 600 }}>Whiskybase</span>
+                                {formData.whiskybaseRating && (
+                                    <span style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', fontWeight: 700 }}>
+                                        ★ {formData.whiskybaseRating}<span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>/100</span>
+                                    </span>
+                                )}
+                            </div>
+                            {formData.whiskybaseUrl && (
+                                <a href={formData.whiskybaseUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-gold)', fontSize: '0.85rem', textDecoration: 'underline', opacity: 0.8 }}>
+                                    View on Whiskybase →
+                                </a>
+                            )}
+                        </div>
+                    )}
 
                     <div>
                         <label className="input-label">Bottle Opened Date</label>
