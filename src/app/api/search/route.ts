@@ -28,6 +28,8 @@ export async function POST(req: NextRequest) {
 - distilledYear: 蒸溜年（不明な場合は空文字を返すか推測）
 - bottledYear: ボトリング年（不明な場合は空文字を返すか推測）
 - region: 地域（ジャパニーズ、スペイサイド、ハイランド等）
+- caskType: 樽タイプ（シェリーバット、バーボンバレル、ミズナラ等。不明な場合は空文字）
+- caskNumber: 樽番号（不明な場合は空文字）
 - tastingNotes: テイスティングノート（香り、味わい、余韻などの特徴）
 
 出力例:
@@ -37,6 +39,8 @@ export async function POST(req: NextRequest) {
     "distilledYear": "",
     "bottledYear": "",
     "region": "ジャパニーズ",
+    "caskType": "シェリーバット",
+    "caskNumber": "",
     "tastingNotes": "熟した柿や桃の香り。奥行きのある甘味と厚みのある味わい。"
   }
 ]`;

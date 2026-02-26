@@ -7,6 +7,8 @@ export interface Whisky {
     distilledYear: string;
     bottledYear: string;
     region: string;
+    caskType: string;
+    caskNumber: string;
     tastingNotes: string;
     openedDate: string; // ISO date string
     imageUrl?: string;

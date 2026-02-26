@@ -85,6 +85,14 @@ export default function Home() {
                   <span>{whisky.distilledYear || '--'} / {whisky.bottledYear || '--'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Cask Type</span>
+                  <span>{whisky.caskType || '--'}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Cask No.</span>
+                  <span>{whisky.caskNumber || '--'}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
                   <span style={{ color: 'var(--text-secondary)' }}>Opened</span>
                   <span>{whisky.openedDate || 'Unopened'}</span>
                 </div>

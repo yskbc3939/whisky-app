@@ -19,6 +19,8 @@ export function WhiskyForm({ initialData, onClose, isEditing = false }: Props) {
         distilledYear: initialData?.distilledYear || '',
         bottledYear: initialData?.bottledYear || '',
         region: initialData?.region || '',
+        caskType: initialData?.caskType || '',
+        caskNumber: initialData?.caskNumber || '',
         tastingNotes: initialData?.tastingNotes || '',
         openedDate: initialData?.openedDate || '',
     });
@@ -68,6 +70,17 @@ export function WhiskyForm({ initialData, onClose, isEditing = false }: Props) {
                         <div style={{ flex: 1 }}>
                             <label className="input-label">Region</label>
                             <input name="region" className="input-field" value={formData.region} onChange={handleChange} />
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ flex: 1 }}>
+                            <label className="input-label">Cask Type (樽タイプ)</label>
+                            <input name="caskType" className="input-field" value={formData.caskType} onChange={handleChange} placeholder="e.g. Sherry Butt, Bourbon Barrel" />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                            <label className="input-label">Cask Number (樽番)</label>
+                            <input name="caskNumber" className="input-field" value={formData.caskNumber} onChange={handleChange} placeholder="e.g. #1234" />
                         </div>
                     </div>
 
