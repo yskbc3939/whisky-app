@@ -3,12 +3,11 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export async function POST(req: NextRequest) {
     try {
-        let { imageBase64, mimeType, apiKey, model = 'gemini-1.5-flash' } = await req.json();
+        let { imageBase64, mimeType, apiKey, model = 'gemini-1.5-flash-latest' } = await req.json();
 
-        // Normalize model names to avoid 404 errors from older client local storage
-        // Actually, with @google/generative-ai, 'gemini-1.5-flash' works perfectly natively without '-latest'
-        if (model === 'gemini-1.5-flash-latest') model = 'gemini-1.5-flash';
-        if (model === 'gemini-1.5-pro-latest') model = 'gemini-1.5-pro';
+        // Ensure we use the -latest aliases which are reliably present in the v1beta endpoint
+        if (model === 'gemini-1.5-flash') model = 'gemini-1.5-flash-latest';
+        if (model === 'gemini-1.5-pro') model = 'gemini-1.5-pro-latest';
 
         if (!imageBase64 || !mimeType) {
             return NextResponse.json({ error: 'Missing imageBase64 or mimeType' }, { status: 400 });
