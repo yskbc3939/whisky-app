@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         const genAI = new GoogleGenerativeAI(key);
         const generativeModel = genAI.getGenerativeModel({ model });
 
-        const prompt = 'あなたは世界有数のウイスキーエキスパートです。この画像に写っているウイスキーのラベルから、ウイスキーの「商品名」のみを特定して出力してください。商品名以外の説明や装飾は一切不要です。';
+        const prompt = 'あなたは世界有数のウイスキーエキスパートです。この画像に写っているウイスキーのラベルから、ウイスキーの「商品名」のみを特定して英語で出力してください。商品名以外の説明や装飾は一切不要です。必ず英語表記で出力してください。';
 
         const imagePart = {
             inlineData: {

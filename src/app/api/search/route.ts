@@ -23,23 +23,28 @@ export async function POST(req: NextRequest) {
 可能な限りGoogle検索（Grounded）を使用して最新の情報を取得してください。もし検索に失敗したり制限に引っかかった場合は、あなたの内部知識のみを使って回答を作成してください。
 出力は必ずJSON配列のみとし、マークダウン（\`\`\`json など）は除外してください。
 
+【重要な言語ルール】
+- name, region, caskType は必ず英語で出力してください。
+- tastingNotes は必ず日本語で出力してください。
+- distilledYear, bottledYear, caskNumber は数値またはコード（言語不問）。
+
 必須フィールド：
-- name: ウイスキーの商品名
+- name: ウイスキーの商品名（英語で出力）
 - distilledYear: 蒸溜年（不明な場合は空文字を返すか推測）
 - bottledYear: ボトリング年（不明な場合は空文字を返すか推測）
-- region: 地域（ジャパニーズ、スペイサイド、ハイランド等）
-- caskType: 樽タイプ（シェリーバット、バーボンバレル、ミズナラ等。不明な場合は空文字）
+- region: 地域（英語で出力。例: Japanese, Speyside, Highland, Islay, Campbeltown 等）
+- caskType: 樽タイプ（英語で出力。例: Sherry Butt, Bourbon Barrel, Mizunara 等。不明な場合は空文字）
 - caskNumber: 樽番号（不明な場合は空文字）
-- tastingNotes: テイスティングノート（香り、味わい、余韻などの特徴）
+- tastingNotes: テイスティングノート（日本語で出力。香り、味わい、余韻などの特徴）
 
 出力例:
 [
   {
-    "name": "山崎 12年",
+    "name": "Yamazaki 12 Year Old",
     "distilledYear": "",
     "bottledYear": "",
-    "region": "ジャパニーズ",
-    "caskType": "シェリーバット",
+    "region": "Japanese",
+    "caskType": "Sherry Butt",
     "caskNumber": "",
     "tastingNotes": "熟した柿や桃の香り。奥行きのある甘味と厚みのある味わい。"
   }
