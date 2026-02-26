@@ -3,7 +3,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export async function POST(req: NextRequest) {
     try {
-        const { name, apiKey, model = 'gemini-2.5-flash' } = await req.json();
+        let { name, apiKey, model = 'gemini-2.5-flash' } = await req.json();
+        model = 'gemini-2.5-flash';
 
         if (!name) {
             return NextResponse.json({ error: 'Missing whisky name query' }, { status: 400 });
