@@ -98,23 +98,16 @@ export function WhiskyForm({ initialData, onClose, isEditing = false }: Props) {
                         />
                     </div>
 
-                    {(formData.whiskybaseRating || formData.whiskybaseUrl) && (
-                        <div style={{ padding: '1rem', borderRadius: '8px', background: 'rgba(207, 170, 112, 0.08)', border: '1px solid rgba(207, 170, 112, 0.2)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                <span style={{ color: 'var(--accent-gold)', fontWeight: 600 }}>Whiskybase</span>
-                                {formData.whiskybaseRating && (
-                                    <span style={{ color: 'var(--accent-gold)', fontSize: '1.2rem', fontWeight: 700 }}>
-                                        ★ {formData.whiskybaseRating}<span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>/100</span>
-                                    </span>
-                                )}
-                            </div>
-                            {formData.whiskybaseUrl && (
-                                <a href={formData.whiskybaseUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-gold)', fontSize: '0.85rem', textDecoration: 'underline', opacity: 0.8 }}>
-                                    View on Whiskybase →
-                                </a>
-                            )}
+                    <div style={{ display: 'flex', gap: '1rem', padding: '1rem', borderRadius: '8px', background: 'rgba(207, 170, 112, 0.08)', border: '1px solid rgba(207, 170, 112, 0.2)' }}>
+                        <div style={{ flex: 1 }}>
+                            <label className="input-label" style={{ color: 'var(--accent-gold)' }}>WB Rating (Whiskybase)</label>
+                            <input name="whiskybaseRating" className="input-field" value={formData.whiskybaseRating} onChange={handleChange} placeholder="e.g. 87" />
                         </div>
-                    )}
+                        <div style={{ flex: 2 }}>
+                            <label className="input-label" style={{ color: 'var(--accent-gold)' }}>Whiskybase URL</label>
+                            <input name="whiskybaseUrl" className="input-field" value={formData.whiskybaseUrl} onChange={handleChange} placeholder="https://www.whiskybase.com/..." />
+                        </div>
+                    </div>
 
                     <div>
                         <label className="input-label">Bottle Opened Date</label>

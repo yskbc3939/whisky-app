@@ -106,23 +106,22 @@ export default function Home() {
                   </div>
                 )}
 
-                {(whisky.whiskybaseRating || whisky.whiskybaseUrl) && (
-                  <div style={{ marginTop: '0.75rem', padding: '0.75rem', borderRadius: '8px', background: 'rgba(207, 170, 112, 0.08)', border: '1px solid rgba(207, 170, 112, 0.2)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 600 }}>Whiskybase</span>
-                      {whisky.whiskybaseRating && (
-                        <span style={{ color: 'var(--accent-gold)', fontSize: '1.1rem', fontWeight: 700 }}>
-                          ★ {whisky.whiskybaseRating}<span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>/100</span>
-                        </span>
-                      )}
-                    </div>
-                    {whisky.whiskybaseUrl && (
-                      <a href={whisky.whiskybaseUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-gold)', fontSize: '0.75rem', textDecoration: 'underline', opacity: 0.8, marginTop: '0.25rem', display: 'inline-block' }}>
-                        View on Whiskybase →
-                      </a>
-                    )}
+                <div style={{ marginTop: '0.75rem', padding: '0.75rem', borderRadius: '8px', background: 'rgba(207, 170, 112, 0.08)', border: '1px solid rgba(207, 170, 112, 0.2)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ color: 'var(--accent-gold)', fontSize: '0.8rem', fontWeight: 600 }}>Whiskybase</span>
+                    <span style={{ color: whisky.whiskybaseRating ? 'var(--accent-gold)' : 'var(--text-muted)', fontSize: whisky.whiskybaseRating ? '1.1rem' : '0.85rem', fontWeight: whisky.whiskybaseRating ? 700 : 400 }}>
+                      {whisky.whiskybaseRating ? `★ ${whisky.whiskybaseRating}` : 'No rating'}
+                      {whisky.whiskybaseRating && <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>/100</span>}
+                    </span>
                   </div>
-                )}
+                  {whisky.whiskybaseUrl ? (
+                    <a href={whisky.whiskybaseUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-gold)', fontSize: '0.75rem', textDecoration: 'underline', opacity: 0.8, marginTop: '0.25rem', display: 'inline-block' }}>
+                      View on Whiskybase →
+                    </a>
+                  ) : (
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.25rem', display: 'inline-block' }}>Link not available</span>
+                  )}
+                </div>
               </div>
             </div>
           ))}
