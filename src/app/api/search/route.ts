@@ -1,0 +1,80 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { GoogleGenAI } from '@google/genai';
+
+export async function POST(req: NextRequest) {
+    try {
+        const { name, apiKey, model = 'gemini-1.5-flash' } = await req.json();
+
+        if (!name) {
+            return NextResponse.json({ error: 'Missing whisky name query' }, { status: 400 });
+        }
+
+        const key = apiKey || process.env.GEMINI_API_KEY;
+        if (!key) {
+            return NextResponse.json({ error: 'Missing Gemini API Key' }, { status: 401 });
+        }
+
+        const ai = new GoogleGenAI({ apiKey: key });
+
+        const prompt = `「${name}」というウイスキーに関する詳細情報を以下のJSONフォーマットの配列で出力してください。複数の候補セットがある場合は最大3つまで出力してください。
+可能な限りGoogle検索（Grounded）を使用して最新の情報を取得してください。もし検索に失敗したり制限に引っかかった場合は、あなたの内部知識のみを使って回答を作成してください。
+出力は必ずJSON配列のみとし、マークダウン（\`\`\`json など）は除外してください。
+
+必須フィールド：
+- name: ウイスキーの商品名
+- distilledYear: 蒸溜年（不明な場合は空文字を返すか推測）
+- bottledYear: ボトリング年（不明な場合は空文字を返すか推測）
+- region: 地域（ジャパニーズ、スペイサイド、ハイランド等）
+- tastingNotes: テイスティングノート（香り、味わい、余韻などの特徴）
+
+出力例:
+[
+  {
+    "name": "山崎 12年",
+    "distilledYear": "",
+    "bottledYear": "",
+    "region": "ジャパニーズ",
+    "tastingNotes": "熟した柿や桃の香り。奥行きのある甘味と厚みのある味わい。"
+  }
+]`;
+
+        let response;
+        try {
+            // 1. Try with Google Search Tool enabled
+            response = await ai.models.generateContent({
+                model: model,
+                contents: prompt,
+                config: {
+                    tools: [{ googleSearch: {} }],
+                }
+            });
+        } catch (searchError) {
+            console.warn("Google Search failed or restricted, falling back to internal knowledge:", searchError);
+
+            // 2. Fallback to Internal Knowledge Mode
+            response = await ai.models.generateContent({
+                model: model,
+                contents: prompt
+                // No tools -> purely internal knowledge
+            });
+        }
+
+        const textResult = response.text ? response.text.trim() : "";
+
+        // Attempt to parse JSON
+        let candidates = [];
+        try {
+            // Clean markdown just in case the model ignores the instruction
+            const cleanedText = textResult.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+            candidates = JSON.parse(cleanedText);
+        } catch (parseError) {
+            console.error("Failed to parse JSON result:", textResult);
+            return NextResponse.json({ error: 'Failed to parse AI response into JSON', rawText: textResult }, { status: 500 });
+        }
+
+        return NextResponse.json({ candidates });
+    } catch (error: any) {
+        console.error('Search error:', error);
+        return NextResponse.json({ error: error.message || 'Internal error' }, { status: 500 });
+    }
+}
