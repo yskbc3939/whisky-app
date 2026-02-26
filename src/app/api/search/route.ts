@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export async function POST(req: NextRequest) {
     try {
-        let { name, apiKey, model = 'gemini-1.5-flash-latest' } = await req.json();
+        let { name, apiKey, model = 'gemini-1.5-flash' } = await req.json();
 
-        // Normalize model names to avoid 404 errors from older client local storage
-        if (model === 'gemini-1.5-flash') model = 'gemini-1.5-flash-latest';
-        if (model === 'gemini-1.5-pro') model = 'gemini-1.5-pro-latest';
+        // Normalize model names back to simple version for stable SDK
+        if (model === 'gemini-1.5-flash-latest') model = 'gemini-1.5-flash';
+        if (model === 'gemini-1.5-pro-latest') model = 'gemini-1.5-pro';
 
         if (!name) {
             return NextResponse.json({ error: 'Missing whisky name query' }, { status: 400 });
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Missing Gemini API Key' }, { status: 401 });
         }
 
-        const ai = new GoogleGenAI({ apiKey: key });
+        const genAI = new GoogleGenerativeAI(key);
 
         const prompt = `「${name}」というウイスキーに関する詳細情報を以下のJSONフォーマットの配列で出力してください。複数の候補セットがある場合は最大3つまで出力してください。
 可能な限りGoogle検索（Grounded）を使用して最新の情報を取得してください。もし検索に失敗したり制限に引っかかった場合は、あなたの内部知識のみを使って回答を作成してください。
@@ -42,28 +42,25 @@ export async function POST(req: NextRequest) {
   }
 ]`;
 
-        let response;
+        let textResult = "";
         try {
             // 1. Try with Google Search Tool enabled
-            response = await ai.models.generateContent({
+            const generativeModel = genAI.getGenerativeModel({
                 model: model,
-                contents: prompt,
-                config: {
-                    tools: [{ googleSearch: {} }],
-                }
+                tools: [{ googleSearch: {} }] as any,
             });
+            const result = await generativeModel.generateContent(prompt);
+            const response = await result.response;
+            textResult = response.text() ? response.text().trim() : "";
         } catch (searchError) {
             console.warn("Google Search failed or restricted, falling back to internal knowledge:", searchError);
 
             // 2. Fallback to Internal Knowledge Mode
-            response = await ai.models.generateContent({
-                model: model,
-                contents: prompt
-                // No tools -> purely internal knowledge
-            });
+            const fallbackModel = genAI.getGenerativeModel({ model });
+            const result = await fallbackModel.generateContent(prompt);
+            const response = await result.response;
+            textResult = response.text() ? response.text().trim() : "";
         }
-
-        const textResult = response.text ? response.text.trim() : "";
 
         // Attempt to parse JSON
         let candidates = [];

@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export async function POST(req: NextRequest) {
     try {
-        let { imageBase64, mimeType, apiKey, model = 'gemini-1.5-flash-latest' } = await req.json();
+        let { imageBase64, mimeType, apiKey, model = 'gemini-1.5-flash' } = await req.json();
 
         // Normalize model names to avoid 404 errors from older client local storage
-        if (model === 'gemini-1.5-flash') model = 'gemini-1.5-flash-latest';
-        if (model === 'gemini-1.5-pro') model = 'gemini-1.5-pro-latest';
+        // Actually, with @google/generative-ai, 'gemini-1.5-flash' works perfectly natively without '-latest'
+        if (model === 'gemini-1.5-flash-latest') model = 'gemini-1.5-flash';
+        if (model === 'gemini-1.5-pro-latest') model = 'gemini-1.5-pro';
 
         if (!imageBase64 || !mimeType) {
             return NextResponse.json({ error: 'Missing imageBase64 or mimeType' }, { status: 400 });
@@ -18,30 +19,21 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Missing Gemini API Key' }, { status: 401 });
         }
 
-        const ai = new GoogleGenAI({ apiKey: key });
+        const genAI = new GoogleGenerativeAI(key);
+        const generativeModel = genAI.getGenerativeModel({ model });
 
-        // The prompt explicitly asks ONLY for the whisky name.
         const prompt = 'あなたは世界有数のウイスキーエキスパートです。この画像に写っているウイスキーのラベルから、ウイスキーの「商品名」のみを特定して出力してください。商品名以外の説明や装飾は一切不要です。';
 
-        const response = await ai.models.generateContent({
-            model: model,
-            contents: [
-                {
-                    role: 'user',
-                    parts: [
-                        { text: prompt },
-                        {
-                            inlineData: {
-                                data: imageBase64,
-                                mimeType: mimeType,
-                            }
-                        }
-                    ]
-                }
-            ]
-        });
+        const imagePart = {
+            inlineData: {
+                data: imageBase64,
+                mimeType
+            },
+        };
 
-        const recognizedName = response.text ? response.text.trim() : null;
+        const result = await generativeModel.generateContent([prompt, imagePart]);
+        const response = await result.response;
+        const recognizedName = response.text() ? response.text().trim() : null;
 
         if (!recognizedName) {
             return NextResponse.json({ error: 'Could not recognize the whisky name from the image.' }, { status: 500 });
