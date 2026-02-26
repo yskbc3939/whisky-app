@@ -3,7 +3,7 @@ import { GoogleGenAI } from '@google/genai';
 
 export async function POST(req: NextRequest) {
     try {
-        const { name, apiKey, model = 'gemini-1.5-flash' } = await req.json();
+        const { name, apiKey, model = 'gemini-1.5-flash-latest' } = await req.json();
 
         if (!name) {
             return NextResponse.json({ error: 'Missing whisky name query' }, { status: 400 });

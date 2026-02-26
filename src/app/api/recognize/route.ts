@@ -3,7 +3,7 @@ import { GoogleGenAI } from '@google/genai';
 
 export async function POST(req: NextRequest) {
     try {
-        const { imageBase64, mimeType, apiKey, model = 'gemini-1.5-flash' } = await req.json();
+        const { imageBase64, mimeType, apiKey, model = 'gemini-1.5-flash-latest' } = await req.json();
 
         if (!imageBase64 || !mimeType) {
             return NextResponse.json({ error: 'Missing imageBase64 or mimeType' }, { status: 400 });
