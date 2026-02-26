@@ -3,10 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export async function POST(req: NextRequest) {
     try {
-        let { imageBase64, mimeType, apiKey, model = 'gemini-2.5-flash' } = await req.json();
-
-        // Force all requests to gemini-2.5-flash due to user's API quota limitations
-        model = 'gemini-2.5-flash';
+        const { imageBase64, mimeType, apiKey, model = 'gemini-2.5-flash' } = await req.json();
 
         if (!imageBase64 || !mimeType) {
             return NextResponse.json({ error: 'Missing imageBase64 or mimeType' }, { status: 400 });
