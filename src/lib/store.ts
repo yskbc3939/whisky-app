@@ -28,7 +28,7 @@ export const useAppStore = create<AppState>()(
     persist(
         (set) => ({
             apiKey: '',
-            model: 'gemini-1.5-flash-latest',
+            model: 'gemini-2.0-flash',
             whiskies: [],
             setApiKey: (key) => set({ apiKey: key }),
             setModel: (model) => set({ model }),
